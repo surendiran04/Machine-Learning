@@ -7,6 +7,8 @@ from datetime import datetime
 import pandas as pd
 from math import exp
 import threading
+import joblib
+import random
 
 app = Flask(__name__)
 
@@ -106,15 +108,25 @@ def predict_rainfall():
 
                 # Your prediction model (dummy in this case)
                 region_model = load_region_model(region_name)
+                if region_model:
+                    new_region_data = pd.DataFrame({
+                'Altitude': [350.32],
+                'Average_Temperature': [avg_temperature],
+                'Pressure': [avg_pressure],
+                'SVP': [calculate_svp(avg_temperature)],
+                'Estimated_Humidity': [avg_humidity],
+                'Cloud_Coverage': [avg_cloud_coverage]})
+                    
                 prediction = region_model.predict(new_region_data)
                 if new_region_data['Average_Temperature'][0] > 32.5:
                     prediction[0] *= 0.15
                 if prediction[0] < 0:
                     prediction[0] = random.uniform(0, 1)
+                if region_name=='TAMILNADU':
+                    prediction[0] *= 0.7
                 else:
                     prediction[0] *= 0.1
-                if region_name='TAMILNADU':
-                    prediction[0] *= 0.7
+                
                 print(f"Predicted Rainfall for {region_name}: {prediction[0]} mm")  # Example prediction (this should be replaced with actual model logic)
 
                 # Create result dictionary for rendering
@@ -149,3 +161,4 @@ if __name__ == '__main__':
 # Ensure that any previous Flask threads are cleared and run a new one
 flask_thread = threading.Thread(target=run_flask)
 flask_thread.start()
+
