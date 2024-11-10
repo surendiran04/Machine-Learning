@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 # Define the path where models are stored
 MODEL_FOLDER = 'AQI_models'
-
+API_KEY = '2f44aef9a2277fe209f75cfbaa66025a'
 # Latitude and Longitude for each state (example values, replace with accurate data)
 state_coordinates = {
     'haryana': {'lat': 30.7333, 'lon': 76.7794},
@@ -19,7 +19,7 @@ state_coordinates = {
     'arunchal pradesh': {'lat': 27.0844, 'lon': 93.6053},
     'jammu & kashmir': {'lat': 34.0837, 'lon': 74.7973},
     'madhya pradesh': {'lat': 23.2599, 'lon': 77.4126},
-    'maharashtra': {'lat': 19.0760, 'lon': 72.8777},
+    'maharastra': {'lat': 19.0760, 'lon': 72.8777},
     'assam': {'lat': 26.1433, 'lon': 91.7362},
     'gujarat': {'lat': 23.0225, 'lon': 72.5714},
     'naga mani mizo tripura': {'lat': 25.6747, 'lon': 94.1077},  # Kohima
@@ -35,6 +35,19 @@ state_coordinates = {
     'punjab': {'lat': 30.7333, 'lon': 76.7794}
 }
 
+def categorize_aqi(aqi):
+    if aqi <= 50:
+        return "Good"
+    elif aqi <= 100:
+        return "Moderate"
+    elif aqi <= 150:
+        return "Unhealthy for Sensitive Groups"
+    elif aqi <= 200:
+        return "Unhealthy"
+    elif aqi <= 300:
+        return "Very Unhealthy"
+    else:
+        return "Hazardous"
 
 # Load model from file
 def load_model(state):
@@ -68,7 +81,7 @@ def get_aqi_data(lat, lon):
 
 @app.route('/')
 def index():
-    return render_template('templates/index.html')
+    return render_template('index.html')
 
 @app.route('/predict', methods=['POST'])
 def predict():
