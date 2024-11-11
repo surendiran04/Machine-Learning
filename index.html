@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather, AQI & Cyclone Prediction</title>
+    <style>
+        .section {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .section-header {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .divider {
+            border-top: 2px solid #ddd;
+            margin: 2rem 0;
+        }
+
+        .form-container {
+            margin-bottom: 1rem;
+        }
+
+        .form-container label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .form-container select,
+        .form-container button {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+        .result-container {
+            padding: 1rem;
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .result-container p {
+            margin: 0.5rem 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Project Heading -->
+    <h1 class="section-header">Rainfall, AQI, and Cyclone Predictions</h1>
+
+    <!-- AQI Prediction Section -->
+    <div class="section">
+        <h2>AQI Prediction</h2>
+
+        <form method="POST" action="/predict_aqi">
+            <div class="form-container">
+                <label for="state">Select State:</label>
+                <select id="state" name="state">
+                    <option value="">--Select Region--</option>
+                    <option value="haryana">Haryana</option>
+                    <option value="orissa">Orissa</option>
+                    <option value="rajasthan">Rajasthan</option>
+                    <option value="tamilnadu">Tamilnadu</option>
+                    <option value="arunchal pradesh">Arunachal Pradesh</option>
+                    <option value="jammu & kashmir">Jammu & Kashmir</option>
+                    <option value="madhya pradesh">Madhya Pradesh</option>
+                    <option value="maharastra">Maharashtra</option>
+                    <option value="assam">Assam</option>
+                    <option value="gujarat">Gujarat</option>
+                    <option value="naga mani mizo tripura">Naga Mani Mizo Tripura</option>
+                    <option value="chattisgarh">Chattisgarh</option>
+                    <option value="kerala">Kerala</option>
+                    <option value="jharkhand">Jharkhand</option>
+                    <option value="uttar pradesh">Uttar Pradesh</option>
+                    <option value="karnataka">Karnataka</option>
+                    <option value="west bengal">West Bengal</option>
+                    <option value="bihar">Bihar</option>
+                    <option value="himachal pradesh">Himachal Pradesh</option>
+                    <option value="telangana">Telangana</option>
+                    <option value="punjab">Punjab</option>
+                </select>
+            </div>
+
+            <button type="submit">Get AQI Prediction</button>
+        </form>
+
+        {% if aqi %}
+        <div class="result-container">
+            <p>Predicted AQI for {{ state }}: <strong>{{ aqi }}</strong></p>
+            <p>Dominant Pollutant: <strong>{{ pollutant }}</strong> (Value: {{ value }} µg/m³)</p>
+            <p>AQI Category: <strong>{{ category }}</strong></p>
+        </div>
+        {% elif error %}
+        <div class="result-container" style="background-color: #fdd;">
+            <p style="color: red;">{{ error }}</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Rainfall Prediction Section -->
+    <div class="section">
+        <h2>Rainfall Forecast</h2>
+
+        <form method="POST" action="/predict_rainfall">
+            <div class="form-container">
+                <label for="region">Select Region:</label>
+                <select id="region" name="region" required>
+                    <option value="">--Select Region--</option>
+                    <option value="ANDAMAN AND NICOBAR">ANDAMAN AND NICOBAR (PORT BLAIR)</option>
+                    <option value="ANDHRA PRADESH">ANDHRA PRADESH (VIJAYAWADA)</option>
+                    <option value="ARUNACHAL PRADESH">ARUNACHAL PRADESH (ITANAGAR)</option>
+                    <option value="ASSAM AND MEGHALAYA">ASSAM AND MEGHALAYA (GUWAHATI)</option>
+                    <option value="BIHAR">BIHAR (PATNA)</option>
+                    <option value="CHHATTISGARH">CHHATTISGARH (RAIPUR)</option>
+                    <option value="COASTAL KARNATAKA">COASTAL KARNATAKA (MANGALORE)</option>
+                    <option value="EAST MADHYAPRADESH">EAST MADHYAPRADESH (JABALPUR)</option>
+                    <option value="EAST RAJASTHAN">EAST RAJASTHAN (JAIPUR)</option>
+                    <option value="EAST UTTAR PRADESH">EAST UTTAR PRADESH (LUCKNOW)</option>
+                    <option value="GANGETIC WEST BENGAL">GANGETIC WEST BENGAL (KOLKATA)</option>
+                    <option value="GUJARAT_REGION">GUJARAT REGION (AHMEDABAD)</option>
+                    <option value="HARYANA DELHI AND CHANDIGARH">HARYANA DELHI AND CHANDIGARH (DELHI)</option>
+                    <option value="HIMACHAL PRADESH">HIMACHAL PRADESH (SHIMLA)</option>
+                    <option value="JAMMU AND KASHMIR">JAMMU AND KASHMIR (SRINAGAR)</option>
+                    <option value="JHARKHAND">JHARKHAND (RANCHI)</option>
+                    <option value="KERALA">KERALA (THIRUVANANTHAPURAM)</option>
+                    <option value="KONKAN AND GOA">KONKAN AND GOA (PANAJI)</option>
+                    <option value="LAKSHADWEEP">LAKSHADWEEP (KAVARATTI)</option>
+                    <option value="MADHYA MAHARASHTRA">MADHYA MAHARASHTRA (AURANGABAD)</option>
+                    <option value="MATATHWADA">MATATHWADA (BEED)</option>
+                    <option value="NMMT">NMMT (KOHIMA)</option>
+                    <option value="NORTH KARNATAKA">NORTH KARNATAKA (HUBLI)</option>
+                    <option value="ORISSA">ORISSA (BHUBANESHWAR)</option>
+                    <option value="PUNJAB">PUNJAB (CHANDIGARH)</option>
+                    <option value="RAYALSEEMA">RAYALSEEMA (KURNOOL)</option>
+                    <option value="SAURASHTRA AND KUTCH">SAURASHTRA AND KUTCH (RAJKOT)</option>
+                    <option value="SHWBS">SHWBS (GANGTOK)</option>
+                    <option value="SOUTH KARNATAKA">SOUTH KARNATAKA (MYSORE)</option>
+                    <option value="TAMILNADU">TAMILNADU (CHENNAI)</option>
+                    <option value="TELANGANA">TELANGANA (HYDERABAD)</option>
+                    <option value="UTTARAKHAND">UTTARAKHAND (DEHRADUN)</option>
+                    <option value="VIDARBHA">VIDARBHA (NAGPUR)</option>
+                    <option value="WEST_RAJASTHAN">WEST RAJASTHAN (JODHPUR)</option>
+                    <option value="WEST_UTTAR_PRADESH">WEST UTTAR PRADESH (MEERUT)</option>
+                </select>
+            </div>
+
+            <button type="submit">Generate Rainfall Forecast</button>
+        </form>
+
+        {% if rlst %}
+        <div class="result-container">
+            <h3>Rainfall Forecast Results for {{ region }}</h3>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>ACTUAL RAINFALL</th>
+                        <th>AVG TEMPERATURE</th>
+                        <th>AVG PRESSURE</th>
+                        <th>AVG SVP</th>
+                        <th>AVG HUMIDITY</th>
+                        <th>AVG CLOUD COVERAGE</th>
+                        <th>PREDICTED RAINFALL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for result in rlst %}
+                    <tr>
+                        <td>{{ result["ACTUAL RAINFALL"] }}</td>
+                        <td>{{ result["AVG TEMPERATURE"] }}</td>
+                        <td>{{ result["AVG PRESSURE"] }}</td>
+                        <td>{{ result["AVG SVP"] }}</td>
+                        <td>{{ result["AVG HUMIDITY"] }}</td>
+                        <td>{{ result["AVG CLOUD COVERAGE"] }}</td>
+                        <td>{{ result["PREDICTED RAINFALL"] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
+
+            {% if error %}
+            <p style="color: red;">{{ error }}</p>
+            {% endif %}
+
+            <div class="divider"></div>
+
+            <div class="section">
+                <h2>Flood Prediction</h2>
+
+                <form method="POST" action="/predict_flood">
+                    <div class="form-container">
+                        <label for="region">Select Region:</label>
+                        <select id="region" name="region" required>
+                            <option value="">--Select Region--</option>
+                            <option value="ANDAMAN AND NICOBAR">ANDAMAN AND NICOBAR (PORT BLAIR)</option>
+                            <option value="ANDHRA PRADESH">ANDHRA PRADESH (VIJAYAWADA)</option>
+                            <option value="ARUNACHAL PRADESH">ARUNACHAL PRADESH (ITANAGAR)</option>
+                            <option value="ASSAM AND MEGHALAYA">ASSAM AND MEGHALAYA (GUWAHATI)</option>
+                            <option value="BIHAR">BIHAR (PATNA)</option>
+                            <option value="CHHATTISGARH">CHHATTISGARH (RAIPUR)</option>
+                            <option value="COASTAL KARNATAKA">COASTAL KARNATAKA (MANGALORE)</option>
+                            <option value="EAST MADHYAPRADESH">EAST MADHYAPRADESH (JABALPUR)</option>
+                            <option value="EAST RAJASTHAN">EAST RAJASTHAN (JAIPUR)</option>
+                            <option value="EAST UTTAR PRADESH">EAST UTTAR PRADESH (LUCKNOW)</option>
+                            <option value="GANGETIC WEST BENGAL">GANGETIC WEST BENGAL (KOLKATA)</option>
+                            <option value="GUJARAT_REGION">GUJARAT REGION (AHMEDABAD)</option>
+                            <option value="HARYANA DELHI AND CHANDIGARH">HARYANA DELHI AND CHANDIGARH (DELHI)</option>
+                            <option value="HIMACHAL PRADESH">HIMACHAL PRADESH (SHIMLA)</option>
+                            <option value="JAMMU AND KASHMIR">JAMMU AND KASHMIR (SRINAGAR)</option>
+                            <option value="JHARKHAND">JHARKHAND (RANCHI)</option>
+                            <option value="KERALA">KERALA (THIRUVANANTHAPURAM)</option>
+                            <option value="KONKAN AND GOA">KONKAN AND GOA (PANAJI)</option>
+                            <option value="LAKSHADWEEP">LAKSHADWEEP (KAVARATTI)</option>
+                            <option value="MADHYA MAHARASHTRA">MADHYA MAHARASHTRA (AURANGABAD)</option>
+                            <option value="MATATHWADA">MATATHWADA (BEED)</option>
+                            <option value="NMMT">NMMT (KOHIMA)</option>
+                            <option value="NORTH KARNATAKA">NORTH KARNATAKA (HUBLI)</option>
+                            <option value="ORISSA">ORISSA (BHUBANESHWAR)</option>
+                            <option value="PUNJAB">PUNJAB (CHANDIGARH)</option>
+                            <option value="RAYALSEEMA">RAYALSEEMA (KURNOOL)</option>
+                            <option value="SAURASHTRA AND KUTCH">SAURASHTRA AND KUTCH (RAJKOT)</option>
+                            <option value="SHWBS">SHWBS (GANGTOK)</option>
+                            <option value="SOUTH KARNATAKA">SOUTH KARNATAKA (MYSORE)</option>
+                            <option value="TAMILNADU">TAMILNADU (CHENNAI)</option>
+                            <option value="TELANGANA">TELANGANA (HYDERABAD)</option>
+                            <option value="UTTARAKHAND">UTTARAKHAND (DEHRADUN)</option>
+                            <option value="VIDARBHA">VIDARBHA (NAGPUR)</option>
+                            <option value="WEST_RAJASTHAN">WEST RAJASTHAN (JODHPUR)</option>
+                            <option value="WEST_UTTAR_PRADESH">WEST UTTAR PRADESH (MEERUT)</option>
+                        </select>
+                    </div>
+
+                    <button type="submit">Generate Flood Prediction</button>
+                </form>
+
+                {% if prediction %}
+                <div class="result-container">
+                    <h3>Flood Prediction Results for {{ region }}: {{ prediction }}%</h3>
+                </div>
+                {% endif %}
+
+                {% if error %}
+                <p style="color: red;">{{ error }}</p>
+                {% endif %}
+            </div>
+            <div class="divider"></div>
+
+            <div class="section">
+                <h2>Cyclone prediction</h2>
+
+                <form action="/predict_cyclone1" method="POST">
+                    <p>Click below to run the cyclone prediction:</p>
+                    <button type="submit">Predict Cyclone</button>
+                </form>
+
+                {% if results %}
+                <div class="space-y-4">
+                    {% for result in results %}
+                    <div class="bg-white p-4 border border-gray-300 rounded-lg shadow-sm">
+                        <h2 class="text-xl font-semibold">{{ result.region }}</h2>
+                        <p class="text-lg">Predicted Cyclone Percentage: {{ result.cyc }}%</p>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p>No results found. Please try again later.</p>
+                {% endif %}
+
+                <div class="divider"></div>
+</body>
+
+
+</html>
